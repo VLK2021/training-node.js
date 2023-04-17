@@ -11,7 +11,7 @@ const typeorm_1 = require("typeorm");
 const user_1 = require("../../entity/user");
 let UserRepository = class UserRepository extends typeorm_1.Repository {
     async getUsers() {
-        return (0, typeorm_1.getManager)().getRepository(user_1.User).find();
+        return (0, typeorm_1.getManager)().getRepository(user_1.User).find({ relations: ['posts'] });
     }
     async createdUser(user) {
         return (0, typeorm_1.getManager)().getRepository(user_1.User).save(user);
