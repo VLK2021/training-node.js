@@ -23,6 +23,10 @@ let PostRepository = class PostRepository extends typeorm_1.Repository {
             body,
         });
     }
+    async deletePost(id) {
+        return (0, typeorm_1.getManager)().getRepository(post_1.Post)
+            .softDelete({ id });
+    }
 };
 PostRepository = __decorate([
     (0, typeorm_1.EntityRepository)(post_1.Post)

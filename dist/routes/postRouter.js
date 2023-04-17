@@ -7,5 +7,6 @@ const router = (0, express_1.Router)();
 router.get('/', postController_1.postController.getAll);
 router.post('/', postController_1.postController.createdPost);
 router.put('/:id', postController_1.postController.updatePost);
+router.delete('/:id', postController_1.postController.deletedPost);
 exports.postRouter = router;
 //# sourceMappingURL=postRouter.js.map

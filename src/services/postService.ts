@@ -15,6 +15,10 @@ class PostService {
     public async updatePost(id: number, title: string, body: string): Promise<UpdateResult> {
         return postReposirory.updatePost(id, title, body);
     }
+
+    public async deletePost(id: number): Promise<UpdateResult> {
+        return postReposirory.deletePost(id);
+    }
 }
 
 export const postService = new PostService();

@@ -23,6 +23,12 @@ class PostController {
         return res.json(updatePost);
     }
 
+    public async deletedPost(req: Request, res: Response): Promise<Response<UpdateResult>> {
+        const {id } = req.params;
+        const deletePost = await postService.deletePost(+id);
+        return res.json(deletePost);
+    }
+
 }
 
 export const postController = new PostController();

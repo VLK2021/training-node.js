@@ -17,6 +17,11 @@ class PostController {
         const updatePost = await postService_1.postService.updatePost(+id, title, body);
         return res.json(updatePost);
     }
+    async deletedPost(req, res) {
+        const { id } = req.params;
+        const deletePost = await postService_1.postService.deletePost(+id);
+        return res.json(deletePost);
+    }
 }
 exports.postController = new PostController();
 //# sourceMappingURL=postController.js.map

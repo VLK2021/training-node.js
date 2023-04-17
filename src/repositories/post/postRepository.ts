@@ -21,6 +21,11 @@ class PostRepository extends Repository<Post> implements IPostRepository{
                 body,
             });
     }
+
+    public async deletePost(id: number) {
+        return getManager().getRepository(Post)
+            .softDelete({ id });
+    }
 }
 
 export const postReposirory = new PostRepository();

@@ -8,7 +8,6 @@
     "watch:server": "nodemon ./src/app.ts --watch ./src",
     "lint": "eslint --cache --ext .js,.ts src",
     "lint:fix": "npm run lint -- --fix",
-
     "typeorm": "node -r ts-node/register ./node_modules/typeorm/cli.js",
     "migration:generate": "typeorm migration:create -n",
     "migration:run": "npm run typeorm migration:run",
@@ -17,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "mysql2": "^3.2.0",
     "reflect-metadata": "^0.1.13",

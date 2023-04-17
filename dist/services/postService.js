@@ -12,6 +12,9 @@ class PostService {
     async updatePost(id, title, body) {
         return postRepository_1.postReposirory.updatePost(id, title, body);
     }
+    async deletePost(id) {
+        return postRepository_1.postReposirory.deletePost(id);
+    }
 }
 exports.postService = new PostService();
 //# sourceMappingURL=postService.js.map

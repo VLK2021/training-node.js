@@ -9,5 +9,5 @@ export interface IPostRepository {
 
     updatePost(id: number, title: string, body: string): Promise<UpdateResult>;
 
-    // deletePost(id: number): Promise<UpdateResult>;
+    deletePost(id: number): Promise<UpdateResult>;
 }
