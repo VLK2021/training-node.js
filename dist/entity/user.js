@@ -41,7 +41,6 @@ __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
         width: 250,
-        nullable: false,
     }),
     __metadata("design:type", String)
 ], User.prototype, "city", void 0);

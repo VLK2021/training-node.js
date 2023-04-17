@@ -37,7 +37,6 @@ export class User extends CommonFields implements IUser{
     @Column({
         type:'varchar',
         width: 250,
-        nullable: false,
     })
     city: string;
 
