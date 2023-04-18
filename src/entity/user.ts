@@ -1,9 +1,10 @@
-import {Column, Entity, OneToMany} from "typeorm";
+import { Column, Entity, OneToMany } from 'typeorm';
 
-import {CommonFields} from "./commonFields";
-import { IPost, Post } from "./post";
+import { CommonFields } from './commonFields';
+import { IPost, Post } from './post';
 
 export interface IUser {
+    id: number;
     firstName: string;
     lastName: string;
     age: number;
@@ -14,33 +15,33 @@ export interface IUser {
     posts: IPost[];
 }
 
-@Entity('users', {database: 'training'})
-export class User extends CommonFields implements IUser{
+@Entity('users', { database: 'training' })
+export class User extends CommonFields implements IUser {
     @Column({
-        type:'varchar',
+        type: 'varchar',
         width: 250,
         nullable: false,
     })
-    firstName: string;
+        firstName: string;
 
     @Column({
-        type:'varchar',
+        type: 'varchar',
         width: 250,
         nullable: false,
     })
-    lastName: string;
+        lastName: string;
 
     @Column({
         type: 'int',
         nullable: false,
     })
-    age: number;
+        age: number;
 
     @Column({
-        type:'varchar',
+        type: 'varchar',
         width: 250,
     })
-    city: string;
+        city: string;
 
     @Column({
         type: 'varchar',
@@ -48,7 +49,7 @@ export class User extends CommonFields implements IUser{
         nullable: false,
         unique: true,
     })
-    phone: number;
+        phone: number;
 
     @Column({
         type: 'varchar',
@@ -56,15 +57,15 @@ export class User extends CommonFields implements IUser{
         nullable: false,
         unique: true,
     })
-    email: string;
+        email: string;
 
     @Column({
         type: 'varchar',
         width: 250,
         nullable: false,
     })
-    password: string;
+        password: string;
 
-    @OneToMany(()=> Post, (post) => post.user)
-    posts: IPost[];
+    @OneToMany(() => Post, (post) => post.user)
+        posts: IPost[];
 }

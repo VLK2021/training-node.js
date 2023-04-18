@@ -1,9 +1,8 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { UpdateResult } from 'typeorm';
 
-import {IUser} from "../entity/user";
-import {userService} from "../services/userService";
-
+import { IUser } from '../entity/user';
+import { userService } from '../services/userService';
 
 class UserController {
     public async getAll(req: Request, res: Response): Promise<Response<IUser[]>> {
@@ -28,7 +27,6 @@ class UserController {
         const deletedUser = await userService.deletedUser(+id);
         return res.json(deletedUser);
     }
-
 }
 
 export const userController = new UserController();

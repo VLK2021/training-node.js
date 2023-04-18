@@ -1,9 +1,8 @@
-import {UpdateResult} from "typeorm";
-import bcrypt from "bcrypt";
+import { UpdateResult } from 'typeorm';
+import bcrypt from 'bcrypt';
 
-import {IUser} from "../entity/user";
-import {userRepository} from "../repositories/user/userRepository";
-
+import { IUser } from '../entity/user';
+import { userRepository } from '../repositories/user/userRepository';
 
 class UserService {
     public async getUsers(): Promise<IUser[]> {
@@ -11,9 +10,9 @@ class UserService {
     }
 
     public async createdUser(user: IUser): Promise<IUser> {
-        const {password} = user;
+        const { password } = user;
         const hashedPassword = await this._hashPassword(password);
-        const dataToSave = {...user, password: hashedPassword}
+        const dataToSave = { ...user, password: hashedPassword };
 
         return userRepository.createdUser(dataToSave);
     }
@@ -26,11 +25,13 @@ class UserService {
         return userRepository.deletedUser(id);
     }
 
+    public async getUserByEmail(email: string): Promise<IUser | undefined> {
+        return userRepository.getUserByEmail(email);
+    }
 
     private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
-
 }
 
 export const userService = new UserService();

@@ -1,8 +1,7 @@
-import {EntityRepository, getManager, Repository} from "typeorm";
+import { EntityRepository, getManager, Repository } from 'typeorm';
 
-import {IUser, User} from "../../entity/user";
-import {IUserRepository} from "./userRepository.interface";
-
+import { IUser, User } from '../../entity/user';
+import { IUserRepository } from './userRepository.interface';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> implements IUserRepository {
@@ -16,7 +15,7 @@ class UserRepository extends Repository<User> implements IUserRepository {
 
     public async updateUser(id: number, password: string, email: string) {
         return getManager().getRepository(User)
-            .update({id}, {
+            .update({ id }, {
                 password,
                 email,
             });
@@ -27,6 +26,13 @@ class UserRepository extends Repository<User> implements IUserRepository {
             .softDelete({ id });
     }
 
+    public async getUserByEmail(email: string) {
+        return getManager().getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email })
+            .andWhere('user.deletedAt IS NULL')
+            .getOne();
+    }
 }
 
 export const userRepository = new UserRepository();

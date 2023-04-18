@@ -22,6 +22,9 @@ class UserService {
     async deletedUser(id) {
         return userRepository_1.userRepository.deletedUser(id);
     }
+    async getUserByEmail(email) {
+        return userRepository_1.userRepository.getUserByEmail(email);
+    }
     async _hashPassword(password) {
         return bcrypt_1.default.hash(password, 10);
     }

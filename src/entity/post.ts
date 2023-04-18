@@ -1,6 +1,8 @@
-import {Column, Entity, JoinColumn, ManyToOne} from "typeorm";
-import { CommonFields } from "./commonFields";
-import { User } from "./user";
+import {
+    Column, Entity, JoinColumn, ManyToOne,
+} from 'typeorm';
+import { CommonFields } from './commonFields';
+import { User } from './user';
 
 export interface IPost {
     title: string;
@@ -8,29 +10,29 @@ export interface IPost {
     userId: number;
 }
 
-@Entity('posts', {database: 'training'})
-export class Post extends CommonFields implements IPost{
+@Entity('posts', { database: 'training' })
+export class Post extends CommonFields implements IPost {
     @Column({
-        type:'varchar',
+        type: 'varchar',
         width: 250,
         nullable: false,
     })
-    title: string;
+        title: string;
 
     @Column({
-        type:'varchar',
+        type: 'varchar',
         width: 250,
         nullable: false,
     })
-    body: string;
+        body: string;
 
     @Column({
         type: 'int',
         nullable: false,
     })
-    userId: number;
+        userId: number;
 
-    @ManyToOne(()=> User, (user) => user.posts)
-    @JoinColumn({name: 'userId'})
-    user: User;
+    @ManyToOne(() => User, (user) => user.posts)
+    @JoinColumn({ name: 'userId' })
+        user: User;
 }

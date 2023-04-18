@@ -1,11 +1,10 @@
-import {EntityRepository, getManager, Repository} from "typeorm";
+import { EntityRepository, getManager, Repository } from 'typeorm';
 
-import {IPost, Post } from "../../entity/post";
-import {IPostRepository} from '../post/postRepositoryInterface';
-
+import { IPost, Post } from '../../entity/post';
+import { IPostRepository } from './postRepositoryInterface';
 
 @EntityRepository(Post)
-class PostRepository extends Repository<Post> implements IPostRepository{
+class PostRepository extends Repository<Post> implements IPostRepository {
     public async getAll() {
         return getManager().getRepository(Post).find();
     }
@@ -16,7 +15,7 @@ class PostRepository extends Repository<Post> implements IPostRepository{
 
     public async updatePost(id: number, title: string, body: string) {
         return getManager().getRepository(Post)
-            .update({id}, {
+            .update({ id }, {
                 title,
                 body,
             });

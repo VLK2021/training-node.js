@@ -1,6 +1,6 @@
-import {UpdateResult} from "typeorm";
+import { UpdateResult } from 'typeorm';
 
-import {IUser} from "../../entity/user";
+import { IUser } from '../../entity/user';
 
 export interface IUserRepository {
     getUsers(): Promise<IUser[]>;
@@ -10,4 +10,6 @@ export interface IUserRepository {
     updateUser(id: number, password: string, email: string): Promise<UpdateResult>;
 
     deletedUser(id: number): Promise<UpdateResult>;
+
+    getUserByEmail(email: string): Promise<IUser | undefined>;
 }

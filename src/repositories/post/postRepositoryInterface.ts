@@ -1,6 +1,5 @@
-import { UpdateResult } from "typeorm";
-import {IPost} from "../../entity/post";
-
+import { UpdateResult } from 'typeorm';
+import { IPost } from '../../entity/post';
 
 export interface IPostRepository {
     getAll(): Promise<IPost[]>;

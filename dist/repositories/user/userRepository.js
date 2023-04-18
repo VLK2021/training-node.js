@@ -27,6 +27,13 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
         return (0, typeorm_1.getManager)().getRepository(user_1.User)
             .softDelete({ id });
     }
+    async getUserByEmail(email) {
+        return (0, typeorm_1.getManager)().getRepository(user_1.User)
+            .createQueryBuilder('user')
+            .where('user.email = :email', { email })
+            .andWhere('user.deletedAt IS NULL')
+            .getOne();
+    }
 };
 UserRepository = __decorate([
     (0, typeorm_1.EntityRepository)(user_1.User)

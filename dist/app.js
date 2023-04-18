@@ -9,10 +9,11 @@ const typeorm_1 = require("typeorm");
 const mainRouter_1 = require("./routes/mainRouter");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use(express_1.default.urlencoded());
+app.use(express_1.default.urlencoded({ extended: true }));
 app.use(mainRouter_1.mainRouter);
-app.listen(5000, async () => {
-    console.log('Server is started!');
+const { PORT } = process.env;
+app.listen(PORT, async () => {
+    console.log(`Server is started on PORT:${PORT}!`);
     try {
         const connection = await (0, typeorm_1.createConnection)();
         if (connection) {
