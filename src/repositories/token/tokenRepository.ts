@@ -10,6 +10,10 @@ class TokenRepository {
     public async findTokenByUserId(userId: number): Promise<IToken | undefined> {
         return getManager().getRepository(Token).findOne({ userId });
     }
+
+    async deleteByParams(findObject: Partial<IToken>) {
+        return getManager().getRepository(Token).delete(findObject);
+    }
 }
 
 export const tokenRepository = new TokenRepository();
