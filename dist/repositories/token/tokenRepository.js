@@ -7,6 +7,9 @@ class TokenRepository {
     async createToken(token) {
         return (0, typeorm_1.getManager)().getRepository(token_1.Token).save(token);
     }
+    findByParams(filterObject) {
+        return (0, typeorm_1.getManager)().getRepository(token_1.Token).findOne(filterObject);
+    }
     async findTokenByUserId(userId) {
         return (0, typeorm_1.getManager)().getRepository(token_1.Token).findOne({ userId });
     }

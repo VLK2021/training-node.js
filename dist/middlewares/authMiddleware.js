@@ -3,14 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
 const services_1 = require("../services");
 const tokenService_1 = require("../services/tokenService");
+const tokenRepository_1 = require("../repositories/token/tokenRepository");
 class AuthMiddleware {
     async checkAccessToken(req, res, next) {
         try {
-            const authToken = req.get('Authorization');
-            if (!authToken) {
+            const accessToken = req.get('Authorization');
+            if (!accessToken) {
                 throw new Error('No token');
             }
-            const { userEmail } = tokenService_1.tokenService.verifyToken(authToken);
+            const { userEmail } = tokenService_1.tokenService.verifyToken(accessToken);
+            const tokenPairFromDB = await tokenRepository_1.tokenRepository.findByParams({ accessToken });
+            if (!tokenPairFromDB) {
+                throw new Error('Token not valid');
+            }
             const userFromToken = await services_1.userService.getUserByEmail(userEmail);
             if (!userFromToken) {
                 throw new Error('Wrong token');
