@@ -12,7 +12,6 @@ class AuthController {
     }
     async logout(req, res) {
         const { id } = req.user;
-        res.clearCookie(constants_1.COOKIE.nameRefreshToken);
         await services_1.tokenService.deleteUserTokenPair(id);
         return res.json('Ok');
     }

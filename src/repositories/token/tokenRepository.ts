@@ -7,6 +7,10 @@ class TokenRepository {
         return getManager().getRepository(Token).save(token);
     }
 
+    public findByParams(filterObject: Partial<IToken>): Promise<IToken | undefined> {
+        return getManager().getRepository(Token).findOne(filterObject);
+    }
+
     public async findTokenByUserId(userId: number): Promise<IToken | undefined> {
         return getManager().getRepository(Token).findOne({ userId });
     }

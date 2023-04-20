@@ -15,4 +15,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./authMiddleware"), exports);
+__exportStar(require("./userMiddleware"), exports);
 //# sourceMappingURL=index.js.map

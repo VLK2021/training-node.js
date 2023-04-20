@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config/config");
 const tokenRepository_1 = require("../repositories/token/tokenRepository");
 class TokenService {
-    async generateTokenPair(payload) {
+    generateTokenPair(payload) {
         const accessToken = jsonwebtoken_1.default.sign(payload, config_1.config.SECRET_ACCESS_KEY, { expiresIn: config_1.config.EXPIRES_IN_ACCESS });
         const refreshToken = jsonwebtoken_1.default.sign(payload, config_1.config.SECRET_REFRESH_KEY, { expiresIn: config_1.config.EXPIRES_IN_REFRESH });
         return {
@@ -16,13 +16,14 @@ class TokenService {
             refreshToken,
         };
     }
-    async saveToken(userId, refreshToken) {
+    async saveToken(userId, refreshToken, accessToken) {
         const tokenFromDb = await tokenRepository_1.tokenRepository.findTokenByUserId(userId);
         if (tokenFromDb) {
             tokenFromDb.refreshToken = refreshToken;
+            tokenFromDb.accessToken = accessToken;
             return tokenRepository_1.tokenRepository.createToken(tokenFromDb);
         }
-        const token = await tokenRepository_1.tokenRepository.createToken({ refreshToken, userId });
+        const token = await tokenRepository_1.tokenRepository.createToken({ accessToken, refreshToken, userId });
         return token;
     }
     async deleteUserTokenPair(userId) {
