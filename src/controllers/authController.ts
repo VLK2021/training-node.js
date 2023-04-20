@@ -1,31 +1,54 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 
-import { COOKIE } from '../constants/constants';
-import { IUser } from '../entity/user';
-import { IRequestExtended, ITokenData } from '../interfaces';
-import { authService, tokenService } from '../services';
+import {COOKIE} from '../constants/constants';
+import {IUser} from '../entity/user';
+import {IRequestExtended, ITokenData} from '../interfaces';
+import { tokenRepository } from '../repositories/token/tokenRepository';
+import {authService, tokenService, userService} from '../services';
 
 
 class AuthController {
+
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
         const data = await authService.registration(req.body);
         res.cookie(
             COOKIE.nameRefreshToken,
             data.refreshToken,
-            { maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true },
+            {maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true},
         );
 
         return res.json(data);
     }
 
     async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
-        const { id } = req.user as IUser;
+        const {id} = req.user as IUser;
 
         res.clearCookie(COOKIE.nameRefreshToken);
 
         await tokenService.deleteUserTokenPair(id);
 
         return res.json('Ok');
+    }
+
+    async login(req: IRequestExtended, res: Response) {
+        try {
+            const {id, email, password: hashPassword } = req.user as IUser;
+            const { password } = req.body;
+
+            await userService.compereUserPassword(password, hashPassword);
+
+            const { refreshToken, accessToken } = tokenService.generateTokenPair({ userId: id, userEmail: email });
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            res.json({
+                refreshToken,
+                accessToken,
+                user: req.user
+            });
+        } catch (e) {
+            res.status(400).json(e);
+        }
     }
 }
 

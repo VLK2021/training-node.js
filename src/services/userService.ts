@@ -29,8 +29,16 @@ class UserService {
         return userRepository.getUserByEmail(email);
     }
 
+    public async compereUserPassword(password: string, hash: string): Promise<void | Error> {
+        const isPasswordUnique =  await bcrypt.compare(password, hash);
+
+        if (!isPasswordUnique) {
+            throw new Error('User no exist!');
+        }
+    }
+
     private async _hashPassword(password: string): Promise<string> {
-        return bcrypt.hash(password, 10);
+        return  await bcrypt.hash(password, 10);
     }
 }
 
