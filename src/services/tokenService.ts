@@ -24,8 +24,8 @@ class TokenService {
             return tokenRepository.createToken(tokenFromDb);
         }
 
-        const token = await tokenRepository.createToken({ accessToken, refreshToken, userId });
-        return token;
+        return tokenRepository.createToken({ accessToken, refreshToken, userId });
+
     }
 
     async deleteUserTokenPair(userId: number) {

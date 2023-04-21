@@ -23,11 +23,13 @@ class TokenService {
             tokenFromDb.accessToken = accessToken;
             return tokenRepository_1.tokenRepository.createToken(tokenFromDb);
         }
-        const token = await tokenRepository_1.tokenRepository.createToken({ accessToken, refreshToken, userId });
-        return token;
+        return tokenRepository_1.tokenRepository.createToken({ accessToken, refreshToken, userId });
     }
     async deleteUserTokenPair(userId) {
         return tokenRepository_1.tokenRepository.deleteByParams({ userId });
+    }
+    async deleteTokenPairByParams(searchObject) {
+        return tokenRepository_1.tokenRepository.deleteByParams(searchObject);
     }
     verifyToken(authToken, tokenType = 'access') {
         let secretWord = config_1.config.SECRET_ACCESS_KEY;

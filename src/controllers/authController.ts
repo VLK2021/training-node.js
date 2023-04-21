@@ -49,7 +49,7 @@ class AuthController {
         }
     }
 
-   async refreshToken(req: IRequestExtended, res: Response) {
+    async refreshToken(req: IRequestExtended, res: Response) {
         try {
             const {id, email} = req.user as IUser;
 

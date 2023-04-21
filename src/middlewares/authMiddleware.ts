@@ -49,7 +49,7 @@ class AuthMiddleware {
                 throw new Error('No token');
             }
 
-            const {userEmail} = tokenService.verifyToken(refreshToken);
+            const {userEmail} = tokenService.verifyToken(refreshToken, 'refresh');
 
             const tokenPairFromDB = await tokenRepository.findByParams({refreshToken});
             if (!tokenPairFromDB) {

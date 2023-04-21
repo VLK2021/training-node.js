@@ -8,6 +8,6 @@ const router = (0, express_1.Router)();
 router.post('/registration', authController_1.authController.registration);
 router.post('/login', middlewares_1.userMiddleware.checkIsUserExist, authController_1.authController.login);
 router.post('/logout', middlewares_1.authMiddleware.checkAccessToken, authController_1.authController.logout);
-// router.post('/refresh');
+router.post('/refresh', middlewares_1.authMiddleware.checkRefreshToken, authController_1.authController.refreshToken);
 exports.authRouter = router;
 //# sourceMappingURL=authRouter.js.map
