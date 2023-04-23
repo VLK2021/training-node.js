@@ -1,5 +1,6 @@
 import { Response, NextFunction} from 'express';
 
+import { ErrorHandler } from '../error/ErrorHandler';
 import { IRequestExtended } from "../interfaces";
 import { userRepository } from "../repositories/user/userRepository";
 
@@ -9,7 +10,7 @@ class UserMiddleware {
         try {
             const userFromDb = await userRepository.getUserByEmail(req.body.email);
             if (!userFromDb) {
-                res.status(404).json('User not found');
+                next(new ErrorHandler('User not found', 404));
                 return;
             }
 
@@ -17,7 +18,7 @@ class UserMiddleware {
             next();
 
         }catch (e) {
-            res.status(400).json(e);
+            next(e);
         }
     }
 

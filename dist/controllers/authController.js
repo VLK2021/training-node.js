@@ -5,7 +5,7 @@ const constants_1 = require("../constants/constants");
 const tokenRepository_1 = require("../repositories/token/tokenRepository");
 const services_1 = require("../services");
 class AuthController {
-    async registration(req, res) {
+    async registration(req, res, next) {
         const data = await services_1.authService.registration(req.body);
         res.cookie(constants_1.COOKIE.nameRefreshToken, data.refreshToken, { maxAge: constants_1.COOKIE.maxAgeRefreshToken, httpOnly: true });
         return res.json(data);
@@ -15,7 +15,7 @@ class AuthController {
         await services_1.tokenService.deleteUserTokenPair(id);
         return res.json('Ok');
     }
-    async login(req, res) {
+    async login(req, res, next) {
         try {
             const { id, email, password: hashPassword } = req.user;
             const { password } = req.body;
@@ -29,10 +29,10 @@ class AuthController {
             });
         }
         catch (e) {
-            res.status(400).json(e);
+            next(e);
         }
     }
-    async refreshToken(req, res) {
+    async refreshToken(req, res, next) {
         try {
             const { id, email } = req.user;
             const refreshTokenToDelete = req.get('Authorization');
@@ -46,7 +46,7 @@ class AuthController {
             });
         }
         catch (e) {
-            res.status(400).json(e);
+            next(e);
         }
     }
 }

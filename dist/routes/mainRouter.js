@@ -9,5 +9,13 @@ const router = (0, express_1.Router)();
 router.use('/users', userRouter_1.userRouter);
 router.use('/posts', postRouter_1.postRouter);
 router.use('/auth', authRouter_1.authRouter);
+// @ts-ignore
+router.use('*', (err, req, res, next) => {
+    res
+        .status(err.code || 500)
+        .json({
+        message: err.message
+    });
+});
 exports.mainRouter = router;
 //# sourceMappingURL=mainRouter.js.map
