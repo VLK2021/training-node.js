@@ -1,15 +1,17 @@
 import {NextFunction, Response} from "express";
 
-import {userService} from "../services";
-import {tokenService} from "../services/tokenService";
-import { IRequestExtended } from "../interfaces";
-import { tokenRepository } from "../repositories/token/tokenRepository";
+import {userService, tokenService} from "../services";
+import {IRequestExtended} from "../interfaces";
+import {tokenRepository} from "../repositories/token/tokenRepository";
+import {authValidator} from "../validators";
+import {ErrorHandler} from "../error/ErrorHandler";
+import {constants} from '../constants';
 
 
 class AuthMiddleware {
     public async checkAccessToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const accessToken = req.get('Authorization');
+            const accessToken = req.get(constants.AUTHORIZATION);
 
             if (!accessToken) {
                 throw new Error('No token');
@@ -73,6 +75,23 @@ class AuthMiddleware {
 
         }
 
+    }
+
+    // VALIDATORS
+    public isLoginValid(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {error, value} = authValidator.login.validate(req.body);
+
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
     }
 }
 
