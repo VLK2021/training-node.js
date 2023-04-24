@@ -18,4 +18,5 @@ __exportStar(require("./authService"), exports);
 __exportStar(require("./tokenService"), exports);
 __exportStar(require("./userService"), exports);
 __exportStar(require("./postService"), exports);
+__exportStar(require("./emailService"), exports);
 //# sourceMappingURL=index.js.map

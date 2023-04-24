@@ -1,4 +1,4 @@
-import {Joi} from "celebrate";
+import Joi from "joi";
 
 import {constants} from "../../constants/constants";
 
