@@ -26,7 +26,7 @@ class AuthMiddleware {
 
             const userFromToken = await userService.getUserByEmail(userEmail);
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                throw new Error('Token not valid');
             }
 
             req.user = userFromToken;
@@ -48,19 +48,22 @@ class AuthMiddleware {
             const refreshToken = req.get('Authorization');
 
             if (!refreshToken) {
-                throw new Error('No token');
+                next(new Error('No token'));
+                return;
             }
 
             const {userEmail} = tokenService.verifyToken(refreshToken, 'refresh');
 
             const tokenPairFromDB = await tokenRepository.findByParams({refreshToken});
             if (!tokenPairFromDB) {
-                throw new Error('Token not valid');
+                next(new Error('Token not valid'));
+                return;
             }
 
             const userFromToken = await userService.getUserByEmail(userEmail);
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                next(new Error('Token not valid'));
+                return;
             }
 
             req.user = userFromToken;
@@ -81,7 +84,6 @@ class AuthMiddleware {
     public isLoginValid(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {error, value} = authValidator.login.validate(req.body);
-
             if (error) {
                 next(new ErrorHandler(error.details[0].message));
                 return;

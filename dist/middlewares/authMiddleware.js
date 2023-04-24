@@ -20,7 +20,7 @@ class AuthMiddleware {
             }
             const userFromToken = await services_1.userService.getUserByEmail(userEmail);
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                throw new Error('Token not valid');
             }
             req.user = userFromToken;
             next();
@@ -36,16 +36,19 @@ class AuthMiddleware {
         try {
             const refreshToken = req.get('Authorization');
             if (!refreshToken) {
-                throw new Error('No token');
+                next(new Error('No token'));
+                return;
             }
             const { userEmail } = services_1.tokenService.verifyToken(refreshToken, 'refresh');
             const tokenPairFromDB = await tokenRepository_1.tokenRepository.findByParams({ refreshToken });
             if (!tokenPairFromDB) {
-                throw new Error('Token not valid');
+                next(new Error('Token not valid'));
+                return;
             }
             const userFromToken = await services_1.userService.getUserByEmail(userEmail);
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                next(new Error('Token not valid'));
+                return;
             }
             req.user = userFromToken;
             next();
