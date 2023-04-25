@@ -75,6 +75,20 @@ class AuthMiddleware {
             next(e);
         }
     }
+    isUserValid(req, res, next) {
+        try {
+            const { error, value } = validators_1.authValidator.createUser.validate(req.body);
+            if (error) {
+                next(new ErrorHandler_1.ErrorHandler(error.details[0].message));
+                return;
+            }
+            req.body = value;
+            next();
+        }
+        catch (e) {
+            next(e);
+        }
+    }
 }
 exports.authMiddleware = new AuthMiddleware();
 //# sourceMappingURL=authMiddleware.js.map
