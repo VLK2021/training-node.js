@@ -96,6 +96,7 @@ class AuthMiddleware {
         }
     }
 
+//valid registration
     public isUserValid(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {error, value} = authValidator.createUser.validate(req.body);
