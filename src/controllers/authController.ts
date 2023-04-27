@@ -1,10 +1,11 @@
 import {NextFunction, Request, Response} from 'express';
+import { EmailActionEnum } from '../constants/enums';
 
 import {COOKIE} from '../constants/constants';
 import {IUser} from '../entity/user';
 import {IRequestExtended, ITokenData} from '../interfaces';
 import { tokenRepository } from '../repositories/token/tokenRepository';
-import {authService, tokenService, userService} from '../services';
+import {authService, emailService, tokenService, userService} from '../services';
 
 
 class AuthController {
@@ -33,7 +34,8 @@ class AuthController {
             const {id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            // await  emailService.sendMail(email, emailActionEnum.WELCOME, {userName: "Nastya"});
+            await  emailService.sendMail(EmailActionEnum.WELCOME, email, {userName: "Nastya"});
+
             await userService.compereUserPassword(password, hashPassword);
 
             const { refreshToken, accessToken } = tokenService.generateTokenPair({ userId: id, userEmail: email });
