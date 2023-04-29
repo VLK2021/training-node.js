@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken';
 
-import { config } from '../config/config';
-import { IToken } from '../entity/token';
-import { IUserPayload, ITokenPair } from '../interfaces';
-import { tokenRepository } from '../repositories/token/tokenRepository';
+import {config} from '../config/config';
+import {IToken} from '../entity/token';
+import {IUserPayload, ITokenPair} from '../interfaces';
+import {tokenRepository} from '../repositories/token/tokenRepository';
 
 class TokenService {
 
-    public  generateTokenPair(payload: IUserPayload): ITokenPair {
-        const accessToken = jwt.sign(payload, config.SECRET_ACCESS_KEY as string, { expiresIn: config.EXPIRES_IN_ACCESS });
-        const refreshToken = jwt.sign(payload, config.SECRET_REFRESH_KEY as string, { expiresIn: config.EXPIRES_IN_REFRESH });
+    public generateTokenPair(payload: IUserPayload): ITokenPair {
+        const accessToken = jwt.sign(payload, config.SECRET_ACCESS_KEY as string, {expiresIn: config.EXPIRES_IN_ACCESS});
+        const refreshToken = jwt.sign(payload, config.SECRET_REFRESH_KEY as string, {expiresIn: config.EXPIRES_IN_REFRESH});
         return {
             accessToken,
             refreshToken,
@@ -24,12 +24,12 @@ class TokenService {
             return tokenRepository.createToken(tokenFromDb);
         }
 
-        return tokenRepository.createToken({ accessToken, refreshToken, userId });
+        return tokenRepository.createToken({accessToken, refreshToken, userId});
 
     }
 
     async deleteUserTokenPair(userId: number) {
-        return tokenRepository.deleteByParams({ userId });
+        return tokenRepository.deleteByParams({userId});
     }
 
     async deleteTokenPairByParams(searchObject: Partial<IToken>) {
@@ -51,7 +51,7 @@ class TokenService {
     }
 
     public generateActionToken(payload: IUserPayload): string {
-        return jwt.sign(payload, config.SECRET_ACTION_KEY, { expiresIn: config.EXPIRES_IN_ACTION });
+        return jwt.sign(payload, config.SECRET_ACTION_KEY, {expiresIn: config.EXPIRES_IN_ACTION});
     }
 }
 
