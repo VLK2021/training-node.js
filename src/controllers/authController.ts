@@ -1,15 +1,16 @@
 import {NextFunction, Request, Response} from 'express';
 import { EmailActionEnum } from '../constants/enums';
 
-import {COOKIE} from '../constants/constants';
+import {constants, COOKIE} from '../constants/constants';
 import {IUser} from '../entity/user';
 import {IRequestExtended, ITokenData} from '../interfaces';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 import {authService, emailService, tokenService, userService} from '../services';
+import { actionTokenRepository } from '../repositories/actionToken/actionTokenRepository';
+import { ActionTokenTypes } from '../enums/actionTokenTypesEnum';
 
 
 class AuthController {
-
     public async registration(req: Request, res: Response, next: NextFunction): Promise<Response<ITokenData>> {
         const data = await authService.registration(req.body);
         res.cookie(
@@ -71,6 +72,40 @@ class AuthController {
             next(e);
         }
     }
+
+    async sendForgotPassword(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { id, email, firstName} = req.user as IUser;
+            //створюємо токен
+            const token = tokenService.generateActionToken({ userId: id, userEmail: email });
+
+            await actionTokenRepository.createActionToken({ actionToken: token, type: ActionTokenTypes.forgotPassword, userId: id });
+
+            await emailService.sendMail(EmailActionEnum.FORGOT_PASSWORD, email, {
+                token,
+                userName: firstName,
+            });
+
+            res.sendStatus(204);
+        }catch (e) {
+            next(e);
+        }
+    }
+
+    async setPassword(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.user as IUser;
+            const actionToken = req.get(constants.AUTHORIZATION);
+
+            await userService.updateUserFogot(id, req.body);
+            await actionTokenRepository.deleteByParams({ actionToken });
+
+            res.sendStatus(201);
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 export const authController = new AuthController();

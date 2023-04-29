@@ -6,9 +6,11 @@ import {tokenRepository} from "../repositories/token/tokenRepository";
 import {authValidator} from "../validators";
 import {ErrorHandler} from "../error/ErrorHandler";
 import {constants} from '../constants';
+import { actionTokenRepository } from "../repositories/actionToken/actionTokenRepository";
 
 
 class AuthMiddleware {
+
     public async checkAccessToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const accessToken = req.get(constants.AUTHORIZATION);
@@ -80,6 +82,41 @@ class AuthMiddleware {
 
     }
 
+    public async checkActionToken(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const actionToken = req.get(constants.AUTHORIZATION);
+
+            if (!actionToken) {
+                next(new ErrorHandler('No token'));
+                return;
+            }
+
+            const { userEmail } = tokenService.verifyToken(actionToken, 'action');
+
+            const tokenFromDB = await actionTokenRepository.findByParams({ actionToken });
+
+            if (!tokenFromDB) {
+                next(new ErrorHandler('Token not valid', 401));
+                return;
+            }
+
+            const userFromToken = await userService.getUserByEmail(userEmail);
+
+            if (!userFromToken) {
+                next(new ErrorHandler('Token not valid', 401));
+                return;
+            }
+
+            req.user = userFromToken;
+            next();
+        } catch (e: any) {
+            res.status(401).json({
+                status: 401,
+                message: e.message,
+            });
+        }
+    }
+
     // VALIDATORS
     public isLoginValid(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
@@ -100,6 +137,39 @@ class AuthMiddleware {
     public isUserValid(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {error, value} = authValidator.createUser.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public checkValidEmail(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { error, value } = authValidator.email.validate(req.body);
+
+            if (error) {
+                next(new ErrorHandler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+
+        }catch (e) {
+            next(e);
+        }
+    }
+
+    public checkValidPass(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const { error, value } = authValidator.password.validate(req.body);
+
             if (error) {
                 next(new ErrorHandler(error.details[0].message));
                 return;

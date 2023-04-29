@@ -19,4 +19,12 @@ export const authValidator = {
         password: Joi.string().required().min(8).message('Password not valid').trim()
     }),
 
+    email: Joi.object({
+        email: commonValidator.emailValidator.message('Email not valid').trim(),
+    }),
+
+    password: Joi.object({
+        password: Joi.string().required().min(8).message('Password not valid').trim(),
+    }),
+
 };

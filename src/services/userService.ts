@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 import { IUser } from '../entity/user';
 import { userRepository } from '../repositories/user/userRepository';
+import { config } from '../config/config';
 
 class UserService {
     public async getUsers(): Promise<IUser[]> {
@@ -19,6 +20,13 @@ class UserService {
 
     public async updateUser(id: number, password: string, email: string): Promise<UpdateResult> {
         return userRepository.updateUser(id, password, email);
+    }
+
+    public async updateUserFogot(id: number, obj: Partial<IUser>): Promise<object | undefined> {
+        if (obj.password) {
+            obj.password = await this._hashPassword(obj.password);
+        }
+        return userRepository.updateUserFogot(id, obj);
     }
 
     public async deletedUser(id: number): Promise<UpdateResult> {
@@ -38,7 +46,7 @@ class UserService {
     }
 
     private async _hashPassword(password: string): Promise<string> {
-        return  await bcrypt.hash(password, 10);
+        return  await bcrypt.hash(password, Number(config.USER_SALT_ROUNDS));
     }
 }
 

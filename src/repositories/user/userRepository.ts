@@ -33,6 +33,11 @@ class UserRepository extends Repository<User> implements IUserRepository {
             .andWhere('user.deletedAt IS NULL')
             .getOne();
     }
+
+    public async updateUserFogot(id: number, user: Partial<IUser>): Promise<object> {
+        return getManager().getRepository(User)
+            .update({ id }, user);
+    }
 }
 
 export const userRepository = new UserRepository();

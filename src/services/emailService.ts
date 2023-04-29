@@ -4,6 +4,7 @@ import path from "path";
 
 import {config} from '../config/config';
 import {EmailActionEnum, emailInfo} from '../constants';
+import {constants} from "../constants/constants";
 
 
 class EmailService {
@@ -16,7 +17,7 @@ class EmailService {
     async sendMail(action: EmailActionEnum, userMail = '', context = {}): Promise<SentMessageInfo> {
 
         const {subject, templateName} = emailInfo[action];
-        Object.assign(context, {frontendUrl: 'https://google.com'});
+        Object.assign(context, {frontendUrl: constants.FRONTEND_URL});
 
         const html = await this.templateRenderer.render(templateName, context);
 

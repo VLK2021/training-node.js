@@ -10,5 +10,12 @@ export const emailInfo = {
     [EmailActionEnum.ACCOUNT_BLOCKED]: {
         subject: 'You account was blocked',
         templateName: 'accountDlocked'
-    }
+    },
+
+    [EmailActionEnum.FORGOT_PASSWORD]: {
+        subject: 'dont worry, update your pass',
+        templateName: 'forgotPassword'
+    },
+
+
 }
