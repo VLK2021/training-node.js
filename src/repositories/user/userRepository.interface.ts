@@ -12,4 +12,6 @@ export interface IUserRepository {
     deletedUser(id: number): Promise<UpdateResult>;
 
     getUserByEmail(email: string): Promise<IUser | undefined>;
+
+    getNewUsers(): Promise<IUser[]>;
 }
