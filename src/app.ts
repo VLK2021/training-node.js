@@ -2,7 +2,9 @@ import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
 
+import {cronRun} from './cron';
 import { mainRouter } from './routes/mainRouter';
+
 
 const app = express();
 app.use(express.json());
@@ -17,6 +19,7 @@ app.listen(PORT, async () => {
         const connection = await createConnection();
         if (connection) {
             console.log('Database connection!');
+            cronRun()
         }
     } catch (err) {
         if (err) console.log(err);
