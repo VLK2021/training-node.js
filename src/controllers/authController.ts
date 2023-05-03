@@ -1,26 +1,58 @@
 import {NextFunction, Request, Response} from 'express';
 import { EmailActionEnum } from '../constants/enums';
 
-import {constants, COOKIE} from '../constants/constants';
+import {constants} from '../constants/constants';
 import {IUser} from '../entity/user';
-import {IRequestExtended, ITokenData} from '../interfaces';
+import {IRequestExtended} from '../interfaces';
 import { tokenRepository } from '../repositories/token/tokenRepository';
 import {authService, emailService, tokenService, userService} from '../services';
 import { actionTokenRepository } from '../repositories/actionToken/actionTokenRepository';
 import { ActionTokenTypes } from '../enums/actionTokenTypesEnum';
+import { s3Service } from '../services/s3.service';
+import { UploadedFile } from 'express-fileupload';
 
 
 class AuthController {
-    public async registration(req: Request, res: Response, next: NextFunction): Promise<Response<ITokenData>> {
-        const data = await authService.registration(req.body);
-        res.cookie(
-            COOKIE.nameRefreshToken,
-            data.refreshToken,
-            {maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true},
-        );
+    // public async registration(req: Request, res: Response, next: NextFunction): Promise<Response<ITokenData>> {
+    //     const data = await authService.registration(req.body);
+    //     res.cookie(
+    //         COOKIE.nameRefreshToken,
+    //         data.refreshToken,
+    //         {maxAge: COOKIE.maxAgeRefreshToken, httpOnly: true},
+    //     );
+    //
+    //     return res.json(data);
+    // }
 
-        return res.json(data);
+    public async registration(req: Request, res: Response, next: NextFunction):
+        Promise<void> {
+        try {
+            const { email } = req.body;
+            const avatar = req.files?.avatar as UploadedFile;
+
+            const userFromDb = await userService.getUserByEmail(email);
+
+            if (userFromDb) {
+                throw new Error(`User with email : ${email} already exists`);
+            }
+
+            const createdUser = await userService.createdUser(req.body);
+
+            if (avatar) {
+                const sendData = await s3Service.uploadFile(avatar, 'user', createdUser.id);
+
+                console.log(sendData.Location);
+            }
+
+            const tokenData = await authService.registration(createdUser);
+
+            res.json(tokenData);
+        } catch (e) {
+            next(e);
+        }
     }
+
+
 
     async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
         const {id} = req.user as IUser;

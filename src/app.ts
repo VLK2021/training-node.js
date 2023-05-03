@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
+import fileUpload from 'express-fileupload';
 
 // import {cronRun} from './cron';
 import { mainRouter } from './routes/mainRouter';
-import fileUpload from 'express-fileupload';
 
 
 

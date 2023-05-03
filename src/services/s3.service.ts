@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { config } from '../config/config';
 
+
 class S3Service {
     Bucket;
 
@@ -28,8 +29,7 @@ class S3Service {
             Bucket: config.S3_NAME as string,
             Body: file.data,
             Key: uploadFilePath,
-            ContentType: file.mimetype,
-            ACL: 'public-read'
+            ContentType: file.mimetype
         })
             .promise() // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
