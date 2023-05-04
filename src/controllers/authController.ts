@@ -44,6 +44,7 @@ class AuthController {
                 console.log(sendData.Location);
             }
 
+            
             const tokenData = await authService.registration(createdUser);
 
             res.json(tokenData);
