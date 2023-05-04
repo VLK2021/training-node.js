@@ -14,7 +14,6 @@ app.use(fileUpload());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(mainRouter);
 
 const { PORT } = process.env;
