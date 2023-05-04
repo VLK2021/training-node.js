@@ -60,7 +60,6 @@ io.on('connection', (socket: any) => {
 
 
 app.use(fileUpload());
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
