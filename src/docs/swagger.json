@@ -1,0 +1,14 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "sep2021",
+    "description": "This is the test doc",
+    "version": "0.1",
+    "contact": {
+      "email": "vova@gmail.com",
+      "name": "Volodymyr Kos"
+    }
+  },
+  "paths": {
+  }
+}
