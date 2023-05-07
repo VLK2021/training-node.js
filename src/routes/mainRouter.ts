@@ -1,11 +1,10 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import swaggerUI from 'swagger-ui-express';
 
-import { authRouter } from './authRouter';
-import { postRouter } from './postRouter';
-import { userRouter } from './userRouter';
-// @ts-ignore
-import * as docs from '../docs/swagger.json';
+import {authRouter} from './authRouter';
+import {postRouter} from './postRouter';
+import {userRouter} from './userRouter';
+import docs from '../docs/swagger.json';
 
 const router = Router();
 
