@@ -80,7 +80,6 @@ const {PORT} = process.env;
 //     }
 // });
 
-
 server.listen(PORT, async () => {
     console.log(`Server is started on PORT:${PORT}!`);
     try {
